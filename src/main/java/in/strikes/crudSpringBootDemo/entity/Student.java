@@ -1,18 +1,33 @@
 package in.strikes.crudSpringBootDemo.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
 public class Student {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    private Boolean deleted;
+
+    public Boolean getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        this.deleted = deleted;
+    }
+
 
     private String name;
     private  int age;
     private String email;
-    private  int roll_no;
+    @JsonProperty("rollNo")
+    private int roll_no;
     private  String subject;
 
     public long getId() {

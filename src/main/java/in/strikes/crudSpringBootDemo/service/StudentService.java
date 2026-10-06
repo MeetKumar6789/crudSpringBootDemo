@@ -20,42 +20,39 @@ public class StudentService {
 
     //1 . End pt to listen (/api/students POST)
     public Student createStudent(Student studentRequest) {
-
+        studentRequest.setDeleted(false);
         Student studentResponse = studentRepository.save(studentRequest);
 
         return studentResponse;
 
     }
-    //get one
-    public Student getStudent(long id)
-    {
-        Optional<Student> studnentResp= studentRepository.findById(id);
 
-        if(studnentResp.isPresent())
-        {
+    //get one
+    public Student getStudent(Long id) {
+
+        Optional<Student> studnentResp = studentRepository. findByIdAndDeletedIsFalse(id);
+
+        if (studnentResp.isPresent()) {
             return studnentResp.get();
+        } else {
+            return null;
         }
-        else {return null;}
 
     }
+
     //get all
-    public List<Student> getallStudents()
-    {
-        List<Student> studentList = studentRepository.findAll();
+    public List<Student> getallStudents() {
+        List<Student> studentList = studentRepository.findByDeletedIsFalse();
         return studentList;
     }
 
     //update 1
-    public Student updateStudent(long id , Student studentReq)
-    {
-        Optional<Student> studnentExists= studentRepository.findById(id);
+    public Student updateStudent(Long id, Student studentReq) {
+        Optional<Student> studnentExists = studentRepository.findByIdAndDeletedIsFalse(id);
 
-        if(!studnentExists.isPresent())
-        {
+        if (!studnentExists.isPresent()) {
             return null;
-        }
-        else
-        {
+        } else {
             Student studentForUpdate = studnentExists.get();
             studentForUpdate.setName(studentReq.getName());
 
@@ -66,16 +63,37 @@ public class StudentService {
             studentForUpdate.setAge(studentReq.getAge());
 
             studentForUpdate.setEmail(studentReq.getEmail());
-
+            studentForUpdate.setDeleted(false);
             return studentRepository.save(studentForUpdate);
         }
 
     }
 
+    //delete method
+    public boolean deleteeStudent(Long id) {
+        boolean isStudent = studentRepository.existsById(id);
+        if (!isStudent) {
+            return false;
+        }
+        studentRepository.deleteById(id);
+        return true;
+    }
 
-    //2.  Business logic -> json -> db
+    //soft delete
+    public boolean deleteStudentStudentSoftly(Long id)
+    {  Optional<Student>existingStudent = studentRepository.findByIdAndDeletedIsFalse(id);
+        if(!existingStudent.isPresent())
+        {
+            return false;
+        }
+        //get
+        Student studentToSave = existingStudent.get();
+        //update
+        studentToSave.setDeleted(true);
+        //save
+        studentRepository.save(studentToSave);
+        return true;
+    }
 
-    //3.  interact with db
 
-    //4.  response back to client
 }
