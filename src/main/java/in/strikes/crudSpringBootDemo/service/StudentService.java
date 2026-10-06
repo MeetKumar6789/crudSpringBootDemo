@@ -27,7 +27,7 @@ public class StudentService {
 
     }
     //get one
-    public Student getStudent(long id)
+    public Student getStudent(Long id)
     {
         Optional<Student> studnentResp= studentRepository.findById(id);
 
@@ -46,7 +46,7 @@ public class StudentService {
     }
 
     //update 1
-    public Student updateStudent(long id , Student studentReq)
+    public Student updateStudent(Long id , Student studentReq)
     {
         Optional<Student> studnentExists= studentRepository.findById(id);
 
@@ -72,10 +72,17 @@ public class StudentService {
 
     }
 
+    public boolean deleteeStudent(Long id)
+    {
+     boolean isStudent = studentRepository.existsById(id);
+     if(!isStudent)
+        {
+            return false;
+        }
+     studentRepository.deleteById(id);
+     return true;
+    }
 
-    //2.  Business logic -> json -> db
 
-    //3.  interact with db
 
-    //4.  response back to client
 }
