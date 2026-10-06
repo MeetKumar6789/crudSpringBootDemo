@@ -120,4 +120,4 @@ This project is suitable for:
 
 > **Don't just copy the code — follow the request flow and understand what happens at every layer.**
 
-Once you understand this project, you'll have a solid foundation for building larger Spring Boot backend applications. trhis all in projec description
+Once you understand this project, you'll have a solid foundation for building larger Spring Boot backend applications.  
