@@ -1,0 +1,26 @@
+$kind: http-request
+name: localhost:8080/api/students/create
+description: ""
+url: localhost:8080/api/students/create
+method: POST
+headers:
+  Accept: application/json
+  Content-Type: application/json
+body:
+  type: json
+  content: "{\r
+
+    \  \"id\" : 1,\r
+
+    \  \"name\" : \"Aditya\",\r
+
+    \  \"email\" : \"aditya@gmail.com\",\r
+
+    \  \"age\" : 28,\r
+
+    \  \"rollNo\" : 101,\r
+
+    \  \"subject\" : \"Spring Framework\"\r
+
+    }\r\n"
+order: 1789377471970
