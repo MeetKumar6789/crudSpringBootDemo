@@ -13,6 +13,7 @@
   - `POST`
   - `PUT`
   - `DELETE`
+  - `PATCH`
 - CRUD operations
 - Controller → Service → Repository architecture
 - Request and Response handling
@@ -25,6 +26,7 @@
 - `@DeleteMapping`
 - `@RequestBody`
 - `@PathVariable`
+- `@RequestParam`
 - `ResponseEntity`
 - HTTP status codes
 - Spring Data JPA
