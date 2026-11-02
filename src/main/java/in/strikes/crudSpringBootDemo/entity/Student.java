@@ -1,40 +1,37 @@
 package in.strikes.crudSpringBootDemo.entity;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
+@Table(name = "students")
 public class Student {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-    private Boolean deleted;
-
-    public Boolean getDeleted() {
-        return deleted;
-    }
-
-    public void setDeleted(Boolean deleted) {
-        this.deleted = deleted;
-    }
-
+    private Long id;
 
     private String name;
-    private  int age;
-    private String email;
-    @JsonProperty("rollNo")
-    private int roll_no;
-    private  String subject;
 
-    public long getId() {
+    private String email;
+
+    @Column(nullable = false)
+    private boolean isDeleted = false;
+
+    public Student() {
+    }
+
+    public Student(Long id, String name, String email, boolean isDeleted) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.isDeleted = isDeleted;
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -46,14 +43,6 @@ public class Student {
         this.name = name;
     }
 
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
-
     public String getEmail() {
         return email;
     }
@@ -62,19 +51,11 @@ public class Student {
         this.email = email;
     }
 
-    public int getRoll_no() {
-        return roll_no;
+    public boolean isDeleted() {
+        return isDeleted;
     }
 
-    public void setRoll_no(int roll_no) {
-        this.roll_no = roll_no;
-    }
-
-    public String getSubject() {
-        return subject;
-    }
-
-    public void setSubject(String subject) {
-        this.subject = subject;
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
     }
 }

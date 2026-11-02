@@ -2,80 +2,79 @@ package in.strikes.crudSpringBootDemo.service;
 
 import in.strikes.crudSpringBootDemo.entity.Student;
 import in.strikes.crudSpringBootDemo.repository.StudentRepository;
-import org.springframework.stereotype.Component;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class StudentService {
 
-    private StudentRepository studentRepository;
+    private final StudentRepository studentRepository;
 
     public StudentService(StudentRepository studentRepository) {
         this.studentRepository = studentRepository;
     }
 
-
-    //1 . End pt to listen (/api/students POST)
-    public Student createStudent(Student studentRequest) {
-
-        Student studentResponse = studentRepository.save(studentRequest);
-
-        return studentResponse;
-
-    }
-    //get one
-    public Student getStudent(long id)
-    {
-        Optional<Student> studnentResp= studentRepository.findById(id);
-
-        if(studnentResp.isPresent())
-        {
-            return studnentResp.get();
-        }
-        else {return null;}
-
-    }
-    //get all
-    public List<Student> getallStudents()
-    {
-        List<Student> studentList = studentRepository.findAll();
-        return studentList;
+    // CREATE STUDENT
+    public Student createStudent(Student student) {
+        student.setDeleted(false);
+        return studentRepository.save(student);
     }
 
-    //update 1
-    public Student updateStudent(long id , Student studentReq)
-    {
-        Optional<Student> studnentExists= studentRepository.findById(id);
+    // GET ONE ACTIVE STUDENT
+    public Student getStudent(long id) {
+        return studentRepository.findByIdAndIsDeletedFalse(id)
+                .orElse(null);
+    }
 
-        if(!studnentExists.isPresent())
-        {
+    // GET ALL ACTIVE STUDENTS
+    public List<Student> getallStudents() {
+        return studentRepository.findByIsDeletedFalse();
+    }
+
+    // UPDATE STUDENT
+    public Student updateStudent(long id, Student studentReq) {
+
+        Student student = studentRepository
+                .findByIdAndIsDeletedFalse(id)
+                .orElse(null);
+
+        if (student == null) {
             return null;
         }
-        else
-        {
-            Student studentForUpdate = studnentExists.get();
-            studentForUpdate.setName(studentReq.getName());
 
-            studentForUpdate.setSubject(studentReq.getSubject());
+        student.setName(studentReq.getName());
+        student.setEmail(studentReq.getEmail());
 
-            studentForUpdate.setRoll_no(studentReq.getRoll_no());
-
-            studentForUpdate.setAge(studentReq.getAge());
-
-            studentForUpdate.setEmail(studentReq.getEmail());
-
-            return studentRepository.save(studentForUpdate);
-        }
-
+        return studentRepository.save(student);
     }
 
+    // SOFT DELETE STUDENT
+    public Student softDeleteStudent(long id) {
 
-    //2.  Business logic -> json -> db
+        Student student = studentRepository
+                .findByIdAndIsDeletedFalse(id)
+                .orElse(null);
 
-    //3.  interact with db
+        if (student == null) {
+            return null;
+        }
 
-    //4.  response back to client
+        student.setDeleted(true);
+
+        return studentRepository.save(student);
+    }
+
+    // HARD DELETE STUDENT
+    public boolean hardDeleteStudent(long id) {
+
+        if (!studentRepository.existsById(id)) {
+            return false;
+        }
+
+        studentRepository.deleteById(id);
+
+        return true;
+    }
 }
